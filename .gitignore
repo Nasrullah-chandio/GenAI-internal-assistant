@@ -1,0 +1,28 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore virtual environment if any
+venv/
+env/
+
+# Ignore environment variables
+.env
+
+# Ignore vector DB files
+vector_store/
+chroma_store/
+
+# Ignore IDE/editor configs
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Log files
+*.log
+
+# Test files (optional)
+test_*.py
+
