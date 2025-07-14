@@ -74,6 +74,7 @@ The architecture follows a modular RAG design:
 <a id="technologies"></a>
 
 <h2>Technologies</h2>
+
 LangChain for retrieval pipeline
 
 ChromaDB / FAISS for vector store

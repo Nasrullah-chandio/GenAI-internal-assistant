@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as streamlit
 from rag_engine.qa_engine import answer_query
 
 st.set_page_config(page_title="GenAI Internal Assistant", page_icon="🤖")
