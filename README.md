@@ -90,9 +90,22 @@ dotenv for managing secrets
 
 <a id="run"></a>
 
-<h2>🚀 How to Run the Assistant</h2> <p align="justify"> Follow the steps below to clone the repository, install dependencies, ingest documents, and start querying your assistant. Instructions are provided separately for Windows and Bash (Linux/macOS) users. </p>
+<h2>How to Run the Assistant</h2> <p align="justify"> Follow the steps below to clone the repository, install dependencies, ingest documents, and start querying your assistant. Instructions are provided separately for Windows and Bash (Linux/macOS) users. </p>
 <h3>🪟 For Windows Users (PowerShell)</h3> <ol> <li><strong>Clone the repository</strong> <pre><code>git clone https://github.com/your-username/genai-internal-assistant.git cd genai-internal-assistant</code></pre> </li> <li><strong>Set up virtual environment</strong> <pre><code>python -m venv venv venv\Scripts\activate pip install -r requirements.txt</code></pre> </li> <li><strong>Create a <code>.env</code> file in the root folder:</strong> <pre> OPENAI_API_KEY=your-openai-key SQL_SERVER=your-sql-server SQL_DATABASE=your-database SQL_USERNAME=your-username SQL_PASSWORD=your-password </pre> </li> <li><strong>Add your data</strong><br> Place your PDF, Word, Excel, or CSV files inside the <code>data/</code> folder. </li> <li><strong>Run ingestion script</strong> <pre><code>python rag_engine/ingest_docs.py</code></pre> </li> <li><strong>Run Streamlit UI</strong> <pre><code>streamlit run app.py</code></pre> Enter your question when prompted. </li> </ol>
 <h3>🐧 For Linux/macOS (Bash)</h3> <ol> <li><strong>Clone the repository</strong> <pre><code>git clone https://github.com/your-username/genai-internal-assistant.git cd genai-internal-assistant</code></pre> </li> <li><strong>Set up virtual environment</strong> <pre><code>python3 -m venv venv source venv/bin/activate pip install -r requirements.txt</code></pre> </li> <li><strong>Create a <code>.env</code> file in the root folder:</strong> <pre> OPENAI_API_KEY=your-openai-key SQL_SERVER=your-sql-server SQL_DATABASE=your-database SQL_USERNAME=your-username SQL_PASSWORD=your-password </pre> </li> <li><strong>Add your data</strong><br> Place your PDF, Word, Excel, or CSV files inside the <code>data/</code> folder. </li> <li><strong>Run ingestion script</strong> <pre><code>python3 rag_engine/ingest_docs.py</code></pre> </li> <li><strong>Run Streamlit UI</strong> <pre><code>streamlit run app.py</code></pre> Enter your question when prompted. </li> </ol>
+
+<a id="results"></a>
+<h2>Results</h2>
+
+<p align="justify">
+Below are sample results showing how the assistant responds to both SQL and document-based queries. The assistant intelligently routes the question through the appropriate retrieval engine and generates contextually relevant answers using OpenAI.
+</p>
+
+<h4>🔎 Document-Based Retrieval Example</h4>
+<img src="images/document_file.png" alt="Document QA Result" width="600"/>
+
+<h4>🧮 SQL-Based Insight Example</h4>
+<img src="images/database_file.png" alt="SQL QA Result" width="600"/>
 
 <h2>Next Steps</h2>
 <p align="justify">
