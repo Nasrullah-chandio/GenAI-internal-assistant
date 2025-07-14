@@ -1,37 +1,41 @@
-import os
-from dotenv import load_dotenv
+from rag_engine.retriever import load_retriever
+from rag_engine.sql_engine import get_sql_connection, get_sql_query_from_question
+from langchain.chains import RetrievalQA
 from langchain_openai import ChatOpenAI
-from rag_engine.retriever import retrieve_relevant_docs, format_context
+import pyodbc
 
-load_dotenv()
+def run_sql_query(question: str) -> str:
+    connection = get_sql_connection()
+    cursor = connection.cursor()
 
-# Initialize OpenAI Chat model (GPT-3.5 or GPT-4 based on your API key config)
-llm = ChatOpenAI(
-    model="gpt-4",  # Change to "gpt-3.5-turbo" if using that model
-    temperature=0.3
-)
+    table_schema = """
+    Table: dwh.fact_bss_churn_data
+    Columns: customerID, SeniorCitizen, Partner, Dependents, tenure, MonthlyCharges, TotalCharges, churn_status, dim_customer_id
+    """
 
-def answer_query(question: str, k: int = 3) -> str:
-    # Step 1: Retrieve top-k relevant chunks
-    docs = retrieve_relevant_docs(question, k)
-    
-    if not docs:
-        return "❌ Sorry, I couldn’t find relevant information in the documents."
+    raw_query = get_sql_query_from_question(question)
+    query_clean = raw_query.strip().strip("`").replace("sql", "").strip()
 
-    # Step 2: Format context into a readable string
-    context = format_context(docs)
+    if not query_clean.lower().startswith("select"):
+        return f"⚠️ Generated SQL doesn't look safe or valid:\n\n{query_clean}"
 
-    # Step 3: Compose the final prompt
-    prompt = f"""You are an internal company assistant. Based on the context below, answer the user's question clearly and concisely.
+    try:
+        cursor.execute(query_clean)
+        result = cursor.fetchone()
+        return result[0] if result else "No results found."
+    except Exception as e:
+        return f"❌ SQL Error: {str(e)}"
+    finally:
+        connection.close()
 
-Context:
-{context}
+def answer_query(question: str) -> str:
+    if "how many" in question.lower() or "total" in question.lower() or "count" in question.lower():
+        return run_sql_query(question)
 
-Question:
-{question}
-
-Answer:"""
-
-    # Step 4: Generate answer from LLM
-    response = llm.invoke(prompt)
-    return response.content
+    retriever = load_retriever().as_retriever()
+    qa_chain = RetrievalQA.from_chain_type(
+        llm=ChatOpenAI(model="gpt-4o", temperature=0),
+        retriever=retriever,
+        return_source_documents=False
+    )
+    return qa_chain.run(question)
