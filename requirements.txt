@@ -11,6 +11,9 @@ langchain-openai>=0.0.8
 langchain-chroma>=0.0.8
 langchain-core>=0.1.47
 pypdf
+pyodbc
+streamlit
+
 
 
 
